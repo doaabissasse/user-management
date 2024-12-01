@@ -29,7 +29,6 @@ jobs:
         run: |
           echo "MAVEN_HOME=$env:USERPROFILE\maven\apache-maven-3.8.8" >> $env:GITHUB_ENV
           echo "$env:USERPROFILE\maven\apache-maven-3.8.8\bin" >> $env:GITHUB_PATH
-
       # Build and SonarQube analysis
       - name: Build and analyze
         env:
