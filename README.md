@@ -9,6 +9,7 @@
 
 ### Image Screen shots
 
+# Mise à jour pour tester le workflow GitHub
 Registration Page
 
 ![Registration Page](img/signup.png "Registration Page")
