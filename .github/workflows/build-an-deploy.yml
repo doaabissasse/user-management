@@ -38,21 +38,6 @@ jobs:
           mvn -B verify sonar:sonar -Dsonar.project.settings=./sonar-project.properties
         shell: cmd
 
-      # Build Docker image
-      - name: Build Docker image
-        run: |
-          docker build -t carikk/quality-gate:latest .
-
-      # Log in to DockerHub
-      - name: Log in to DockerHub
-        shell: powershell
-        run: |
-          docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-
-      # Push Docker image
-      - name: Push Docker image
-        run: |
-          docker push carikk/quality-gate:latest
 
       # Set up kubeconfig from secret
       - name: Set up kubeconfig
