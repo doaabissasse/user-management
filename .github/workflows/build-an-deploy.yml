@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Analyze
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build, Analyze, and Deploy
+    name: Build, Analyze
     runs-on: self-hosted
 
     steps:
@@ -23,6 +23,7 @@ jobs:
         with:
           java-version: 21
 
+      # Setup Maven
       - name: Setup Maven
         shell: powershell
         run: |
@@ -37,35 +38,3 @@ jobs:
         run: |
           mvn -B verify sonar:sonar -Dsonar.project.settings=./sonar-project.properties
         shell: cmd
-
-
-      # Set up kubeconfig from secret
-      - name: Set up kubeconfig
-        run: |
-          # Créer le répertoire .kube si nécessaire
-          if (-Not (Test-Path "$env:USERPROFILE\.kube")) {
-            New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.kube"
-          }
-          # Écrire le fichier kubeconfig
-          echo "${{ secrets.KUBECONFIG_CONTENT }}" > "$env:USERPROFILE\.kube\config"
-          kubectl config use-context docker-desktop  # Set context to docker-desktop
-          kubectl config set-context --current --namespace=ensakh
-
-      # Verify Kubernetes context
-      - name: Verify Kubernetes context
-        run: |
-          kubectl config current-context
-          kubectl get namespaces
-
-      # Deploy to Kubernetes
-      - name: Deploy to kube
-        run: |
-          kubectl apply -f k8s/deployment.yaml
-
-      # Verify Kubernetes context again
-      - name: Verify Kubernetes context
-        run: |
-          kubectl config current-context
-          kubectl get nodes
-          kubectl get namespaces
-          kubectl get pods
